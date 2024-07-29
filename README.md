@@ -23,10 +23,10 @@ $ gem install quartr
 First instantiate a Quartr API client:
 
 ```ruby
-quartr = Quartr::API.new(ENV['YOUR_Quartr_API_KEY'])
+quartr = Quartr::API.new(ENV['YOUR_QUARTR_API_KEY'])
 ```
 
-You can also set the env var YOUR_Quartr_API_KEY and then just call
+You can also set the env var YOUR_QUARTR_API_KEY and then just call
 
 ```ruby
 quartr = Quartr::API.new

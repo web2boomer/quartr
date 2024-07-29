@@ -4,14 +4,16 @@ require 'faraday'
 
 module Quartr
   class API
-    HOST = "https://quartr.com/public/"
+    # HOST = "https://api.quartr.com/public/"
+    HOST = "https://api-demo.quartr.com/public/"
+    
     
     JSON_CONTENT_TYPE = 'application/json'
 
     RETRY_WAIT = 10
     MAX_RETRY = 6    
 
-    def initialize(apikey = ENV['Quartr_API_KEY'] )
+    def initialize(apikey = ENV['QUARTR_API_KEY'] )
       @apikey = apikey # fall back on ENV var if non passed in
     end
 
@@ -33,16 +35,24 @@ module Quartr
 
         begin
           full_endpoint_url = "#{HOST}#{endpoint}"
-          conn = Faraday.new(url: HOST)
-          response = conn.get(endpoint) do |req|
-            req.body = params.to_json
-            req.headers['X-Api-Key'] = @apikey
-          end
 
-          logger.debug response.env.url.to_s
+          url = URI(full_endpoint_url)
+          http = Net::HTTP.new(url.host, url.port)
+          http.use_ssl = true
+          
+          request = Net::HTTP::Get.new(url)
+          request["X-Api-Key"] = @apikey
+          
+          response = http.request(request)
+          puts response.read_body
+
+
+          logger.debug @apikey
+          # logger.debug response.env.url
+          # logger.debug response.headers
           # logger.debug args
-          logger.debug response.status
-          logger.debug response.body
+          # logger.debug response.status
+          logger.debug response.read_body
 
           return
 
