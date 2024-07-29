@@ -4,8 +4,8 @@ require 'faraday'
 
 module Quartr
   class API
-    # HOST = "https://api.quartr.com/public/"
-    HOST = "https://api-demo.quartr.com/public/"
+    PRODUCTION_HOST = "https://api.quartr.com/public/"
+    DEMO_HOST = "https://api-demo.quartr.com/public/"
     
     JSON_CONTENT_TYPE = 'application/json'
 
@@ -33,14 +33,16 @@ module Quartr
         retries = 0
 
         begin
-          full_endpoint_url = "#{HOST}#{endpoint}"
-          conn = Faraday.new(url: HOST)
+          
+          chosen_host = ENV['QUARTR_DEMO'] == "yes" ? DEMO_HOST : PRODUCTION_HOST
+          full_endpoint_url = "#{chosen_host}#{endpoint}"
+          conn = Faraday.new(url: chosen_host)
           response = conn.get(endpoint) do |req|
             req.body = params.to_json
             req.headers['X-Api-Key'] = @apikey
           end
 
-          # logger.debug response.env.url
+          logger.debug response.env.url
           # logger.debug response.headers
           # logger.debug args
           # logger.debug response.status

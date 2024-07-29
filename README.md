@@ -26,11 +26,13 @@ First instantiate a Quartr API client:
 quartr = Quartr::API.new(ENV['YOUR_QUARTR_API_KEY'])
 ```
 
-You can also set the env var YOUR_QUARTR_API_KEY and then just call
+You can also set the env var YOUR_QUARTR_API_KEY and then just call.
 
 ```ruby
 quartr = Quartr::API.new
 ```
+
+_*If you have a demo key and so need to access demo API at api-demo.quartr.com rather than api.quartr.com set QUARTR_DEMO env var to 'yes' e.g. export QUARTR_DEMO=yes*_
 
 Now we can do all sorts...
 
