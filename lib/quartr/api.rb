@@ -40,13 +40,11 @@ module Quartr
             req.headers['X-Api-Key'] = @apikey
           end
 
-          logger.debug response.env.url
-          logger.debug response.headers
+          # logger.debug response.env.url
+          # logger.debug response.headers
           # logger.debug args
-          logger.debug response.status
-          logger.debug response.body
-
-          return
+          # logger.debug response.status
+          # logger.debug response.body
 
           if response.status == 403 || response.status == 401
             raise AccessDenied.new response.body
