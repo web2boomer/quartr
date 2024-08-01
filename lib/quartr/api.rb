@@ -18,8 +18,8 @@ module Quartr
 
     # beginning of endpoints, note that there are inconsistencies with some endpoints using hyphens and some underscores. To make this more obvious, hypens are strings.
 
-    def companies
-      request "v2/companies"
+    def companies(limit: nil, page: nil )
+      request "v2/companies", {limit: limit , page: page}
     end
 
     # def search_ticker(query:)
@@ -37,12 +37,13 @@ module Quartr
           chosen_host = ENV['QUARTR_DEMO'] == "yes" ? DEMO_HOST : PRODUCTION_HOST
           full_endpoint_url = "#{chosen_host}#{endpoint}"
           conn = Faraday.new(url: chosen_host)
-          response = conn.get(endpoint) do |req|
-            req.body = params.to_json
+
+          response = conn.get(endpoint, params) do |req|
+            # req.body = params.to_json
             req.headers['X-Api-Key'] = @apikey
           end
 
-          logger.debug response.env.url
+          # logger.debug response.env.url
           # logger.debug response.headers
           # logger.debug args
           # logger.debug response.status
