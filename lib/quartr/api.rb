@@ -22,6 +22,10 @@ module Quartr
       request "v2/companies", {limit: limit , page: page}
     end
 
+    def company(company_id)
+      request "v2/companies/#{company_id}"
+    end    
+
     # def search_ticker(query:)
     #   request "v3/search-ticker", {query: query}
     # end
