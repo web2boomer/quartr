@@ -23,7 +23,7 @@ module Quartr
     end
 
     def company(company_id)
-      request "v2/companies/#{company_id}"
+      request "v1/companies/#{company_id}"
     end    
 
     # def search_ticker(query:)
