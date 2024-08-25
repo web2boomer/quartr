@@ -40,9 +40,8 @@ Now we can do all sorts...
 
 ```ruby
 companies = quartr.companies
-
-companies = quartr.search_ticker(query: 'AA')
-companies = quartr.search_name(query: 'Microsoft')
+companies = quartr.comapny(3624) # Nvidia
+companies = quartr.event(256) # gran an event
 ```
 
 

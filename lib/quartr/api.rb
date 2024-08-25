@@ -26,6 +26,10 @@ module Quartr
       request "v1/companies/#{company_id}"
     end    
 
+    def event(event_id)
+      request "v1/events/#{event_id}"
+    end        
+
     # def search_ticker(query:)
     #   request "v3/search-ticker", {query: query}
     # end

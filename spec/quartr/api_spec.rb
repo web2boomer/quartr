@@ -14,6 +14,22 @@ RSpec.describe Quartr::API do
     end
   end
 
+  describe '#company' do
+    subject { api.company(3624) }
+
+    it "includes attributes" do  
+      expect(subject.count).to be > 0
+    end
+  end  
+
+  describe '#event' do
+    subject { api.event(256) }
+
+    it "includes attributes" do  
+      expect(subject.count).to be > 0
+    end
+  end    
+
 
 
 
