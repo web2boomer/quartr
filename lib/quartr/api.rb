@@ -12,13 +12,15 @@ module Quartr
     RETRY_WAIT = 10
     MAX_RETRY = 6    
 
+    DEFAULT_PAGE_LIMIT =  500 # defaults to 10 in API , max 500
+
     def initialize(apikey = ENV['QUARTR_API_KEY'] )
       @apikey = apikey # fall back on ENV var if non passed in
     end
 
     # beginning of endpoints, note that there are inconsistencies with some endpoints using hyphens and some underscores. To make this more obvious, hypens are strings.
 
-    def companies(limit: nil, page: 1 )
+    def companies(limit: DEFAULT_PAGE_LIMIT, page: 1 )
       request "v2/companies", {limit: limit , page: page}
     end
 
@@ -27,7 +29,7 @@ module Quartr
       return request "v1/companies/ticker/#{ticker}" if ticker
     end    
 
-    def earlier_events(tickers: , limit: nil , page: 1)
+    def earlier_events(tickers: , limit: DEFAULT_PAGE_LIMIT , page: 1)
       request "v1/companies/ticker/earlier-events", {limit: limit , page: page}, { tickers: tickers }
     end        
 
@@ -66,10 +68,14 @@ module Quartr
           # logger.debug response.body
 
           if response.status == 500
-            raise ServerError.new response.inspect          
+            raise ServerError.new response.body          
 
           elsif response.status == 403 || response.status == 401
             raise AccessDenied.new response.body
+
+
+          elsif response.status == 404
+            raise NotFound.new response.body            
 
           elsif response.status == 504
             raise ServiceUnavailable.new "#{response.status} Gateway Timeout"

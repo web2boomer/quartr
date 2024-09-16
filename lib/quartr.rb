@@ -7,4 +7,5 @@ module Quartr
   class ServiceUnavailable < Error; end
   class InvalidResponse < Error; end
   class ServerError < Error; end
+  class NotFound < Error; end
 end
