@@ -26,8 +26,8 @@ module Quartr
       request "v1/companies/#{company_id}"
     end    
 
-    def earlier_events(tickers: Array.new, limit: nil , page: 1)
-      request "v1/companies/ticker/earlier-events", {limit: limit , page: page}, {tickers: tickers }
+    def earlier_events(tickers: , limit: nil , page: 1)
+      request "v1/companies/ticker/earlier-events", {limit: limit , page: page}, { tickers: tickers }
     end        
 
     def event(event_id)
@@ -52,7 +52,7 @@ module Quartr
 
           response = conn.get(endpoint, params) do |request|
             request.body = body_parameters.to_json
-            p request.body.inspect
+            p request.body
             request.headers['X-Api-Key'] = @apikey
           end
 
