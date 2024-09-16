@@ -14,8 +14,16 @@ RSpec.describe Quartr::API do
     end
   end
 
-  describe '#company' do
-    subject { api.company(3624) }
+  describe '#company by id' do
+    subject { api.company(company_id: 3624) }
+
+    it "includes attributes" do  
+      expect(subject.count).to be > 0
+    end
+  end  
+
+  describe '#company by ticker' do
+    subject { api.company(ticker: "NVDA") }
 
     it "includes attributes" do  
       expect(subject.count).to be > 0
@@ -31,7 +39,7 @@ RSpec.describe Quartr::API do
   end    
 
   describe '#earlier_events' do
-    subject { api.earlier_events(tickers: ["NVDA", "APPL"]) }
+    subject { api.earlier_events(tickers: ["NVDA", "SHOP"]) }
 
     it "includes attributes" do  
       expect(subject.count).to be > 0

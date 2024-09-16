@@ -6,5 +6,5 @@ module Quartr
   class AccessDenied < Error; end
   class ServiceUnavailable < Error; end
   class InvalidResponse < Error; end
-  class InvalidArgument < Error; end
+  class ServerError < Error; end
 end

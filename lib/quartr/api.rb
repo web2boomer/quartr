@@ -22,8 +22,9 @@ module Quartr
       request "v2/companies", {limit: limit , page: page}
     end
 
-    def company(company_id)
-      request "v1/companies/#{company_id}"
+    def company(company_id: nil, ticker: nil)
+      return request "v1/companies/#{company_id}" if company_id
+      return request "v1/companies/ticker/#{ticker}" if ticker
     end    
 
     def earlier_events(tickers: , limit: nil , page: 1)
@@ -34,6 +35,7 @@ module Quartr
       request "v1/events/#{event_id}"
     end        
 
+
     # def search_ticker(query:)
     #   request "v3/search-ticker", {query: query}
     # end
@@ -41,7 +43,7 @@ module Quartr
 
     private
 
-      def request(endpoint, params = Hash.new, body_parameters = Hash.new)
+      def request(endpoint, params = Hash.new, the_body = nil)
         retries = 0
 
         begin
@@ -50,19 +52,23 @@ module Quartr
           full_endpoint_url = "#{chosen_host}#{endpoint}"
           conn = Faraday.new(url: chosen_host)
 
-          response = conn.get(endpoint, params) do |request|
-            request.body = body_parameters.to_json
-            p request.body
+          request_type = the_body ? "post" : "get"
+
+          response = conn.send(request_type, endpoint, params) do |request|
+            request.headers['Content-Type'] = 'application/json'
+            request.body =  the_body.to_json if the_body
             request.headers['X-Api-Key'] = @apikey
           end
 
           # logger.debug response.env.url
           # logger.debug response.headers
-          # logger.debug args
           # logger.debug response.status
           # logger.debug response.body
 
-          if response.status == 403 || response.status == 401
+          if response.status == 500
+            raise ServerError.new response.inspect          
+
+          elsif response.status == 403 || response.status == 401
             raise AccessDenied.new response.body
 
           elsif response.status == 504
