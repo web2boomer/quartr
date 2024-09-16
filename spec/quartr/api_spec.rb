@@ -30,6 +30,13 @@ RSpec.describe Quartr::API do
     end
   end    
 
+  describe '#earlier_events' do
+    subject { api.earlier_events(tickers: ["NVDA", "APPL"]) }
+
+    it "includes attributes" do  
+      expect(subject.count).to be > 0
+    end
+  end      
 
 
 

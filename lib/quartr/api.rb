@@ -18,13 +18,17 @@ module Quartr
 
     # beginning of endpoints, note that there are inconsistencies with some endpoints using hyphens and some underscores. To make this more obvious, hypens are strings.
 
-    def companies(limit: nil, page: nil )
+    def companies(limit: nil, page: 1 )
       request "v2/companies", {limit: limit , page: page}
     end
 
     def company(company_id)
       request "v1/companies/#{company_id}"
     end    
+
+    def earlier_events(tickers: Array.new, limit: nil , page: 1)
+      request "v1/companies/ticker/earlier-events", {limit: limit , page: page}, {tickers: tickers }
+    end        
 
     def event(event_id)
       request "v1/events/#{event_id}"
@@ -37,7 +41,7 @@ module Quartr
 
     private
 
-      def request(endpoint, params = Hash.new)
+      def request(endpoint, params = Hash.new, body_parameters = Hash.new)
         retries = 0
 
         begin
@@ -46,9 +50,10 @@ module Quartr
           full_endpoint_url = "#{chosen_host}#{endpoint}"
           conn = Faraday.new(url: chosen_host)
 
-          response = conn.get(endpoint, params) do |req|
-            # req.body = params.to_json
-            req.headers['X-Api-Key'] = @apikey
+          response = conn.get(endpoint, params) do |request|
+            request.body = body_parameters.to_json
+            p request.body.inspect
+            request.headers['X-Api-Key'] = @apikey
           end
 
           # logger.debug response.env.url
