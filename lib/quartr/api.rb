@@ -56,15 +56,16 @@ module Quartr
 
           request_type = the_body ? "post" : "get"
 
-          response = conn.send(request_type, endpoint, params) do |request|
+          response = conn.send(request_type, endpoint) do |request|
+            request.params = params
             request.headers['Content-Type'] = 'application/json'
             request.body =  the_body.to_json if the_body
             request.headers['X-Api-Key'] = @apikey
           end
 
-          # logger.debug response.env.url
-          # logger.debug response.headers
-          # logger.debug response.status
+          logger.debug response.env.url
+          logger.debug response.headers
+          logger.debug response.status
           # logger.debug response.body
 
           if response.status == 500
