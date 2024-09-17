@@ -63,9 +63,9 @@ module Quartr
             request.headers['X-Api-Key'] = @apikey
           end
 
-          logger.debug response.env.url
-          logger.debug response.headers
-          logger.debug response.status
+          # logger.debug response.env.url
+          # logger.debug response.headers
+          # logger.debug response.status
           # logger.debug response.body
 
           if response.status == 500
