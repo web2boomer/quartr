@@ -74,9 +74,11 @@ module Quartr
           elsif response.status == 403 || response.status == 401
             raise AccessDenied.new response.body
 
-
           elsif response.status == 404
-            raise NotFound.new response.body            
+            raise NotFound.new response.body 
+            
+          elsif response.status == 502
+            raise ServerError.new "#{response.status} Bad Gateway"                  
 
           elsif response.status == 504
             raise ServiceUnavailable.new "#{response.status} Gateway Timeout"
