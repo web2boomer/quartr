@@ -20,27 +20,65 @@ module Quartr
 
     # beginning of endpoints, note that there are inconsistencies with some endpoints using hyphens and some underscores. To make this more obvious, hypens are strings.
 
-    def companies(limit: DEFAULT_PAGE_LIMIT, page: 1 )
-      request "v2/companies", {limit: limit , page: page}
+    def companies(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, isins: nil, updated_before: nil, updated_after: nil, ids: nil)
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction,
+        countries: countries,
+        exchanges: exchanges,
+        tickers: tickers,
+        isins: isins,
+        updatedBefore: updated_before,
+        updatedAfter: updated_after,
+        ids: ids
+      }
+      request "v3/companies", params
     end
 
     def company(company_id: nil, ticker: nil)
-      return request "v1/companies/#{company_id}" if company_id
-      return request "v1/companies/ticker/#{ticker}" if ticker
+      if company_id
+        return request "v3/companies/#{company_id}"
+      elsif ticker
+        # v3 API doesn't support direct ticker lookup, use list endpoint with ticker filter
+        result = companies(tickers: ticker, limit: 1)
+        return result if result && result['data'] && result['data'].any?
+        raise NotFound.new "Company with ticker #{ticker} not found"
+      end
     end    
 
-    def earlier_events(tickers: , limit: DEFAULT_PAGE_LIMIT , page: 1)
-      request "v1/companies/ticker/earlier-events", {limit: limit , page: page}, { tickers: tickers }
+    def events(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, company_ids: nil, type_ids: nil, start_date: nil, end_date: nil, sort_by: 'id', updated_before: nil, updated_after: nil, isins: nil)
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction,
+        countries: countries,
+        exchanges: exchanges,
+        tickers: tickers,
+        companyIds: company_ids,
+        typeIds: type_ids,
+        startDate: start_date,
+        endDate: end_date,
+        sortBy: sort_by,
+        updatedBefore: updated_before,
+        updatedAfter: updated_after,
+        isins: isins
+      }
+      request "v3/events", params
     end        
 
     def event(event_id)
-      request "v1/events/#{event_id}"
-    end        
-
-
-    # def search_ticker(query:)
-    #   request "v3/search-ticker", {query: query}
-    # end
+      request "v3/events/#{event_id}"
+    end     
+    
+    
+    def live_transcripts(countries: nil, exchanges: nil, tickers: nil, event_ids: nil, states: nil, limit: 500)
+      request "v3/live/transcripts", {countries: countries, exchanges: exchanges, tickers: tickers, eventIds: event_ids, states: states, limit: limit}
+    end     
+    
+    def live_transcript(id: )
+      request "v3/live/transcripts/#{id}"
+    end     
 
 
     private
@@ -49,6 +87,9 @@ module Quartr
         retries = 0
 
         begin
+
+
+          params = params.compact # get rid of nil values in params 
           
           chosen_host = ENV['QUARTR_DEMO'] == "yes" ? DEMO_HOST : PRODUCTION_HOST
           full_endpoint_url = "#{chosen_host}#{endpoint}"

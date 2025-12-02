@@ -40,8 +40,8 @@ Now we can do all sorts...
 
 ```ruby
 companies = quartr.companies
-companies = quartr.comapny(3624) # Nvidia
-companies = quartr.event(256) # gran an event
+companies = quartr.company(3624) # Nvidia
+companies = quartr.event(256) # grab an event
 ```
 
 
