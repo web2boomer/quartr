@@ -70,6 +70,15 @@ module Quartr
     def event(event_id)
       request "v3/events/#{event_id}"
     end     
+
+    def event_types(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc')
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction
+      }
+      request "v3/event-types", params
+    end
     
     
     def live_transcripts(countries: nil, exchanges: nil, tickers: nil, event_ids: nil, states: nil, limit: 500)
@@ -79,6 +88,95 @@ module Quartr
     def live_transcript(id: )
       request "v3/live/transcripts/#{id}"
     end     
+
+    def document_types(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc')
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction
+      }
+      request "v3/document-types", params
+    end
+
+    def transcripts(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, company_ids: nil, event_ids: nil, type_ids: nil, start_date: nil, end_date: nil, isins: nil, document_group_ids: nil, updated_before: nil, updated_after: nil, expand: nil)
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction,
+        countries: countries,
+        exchanges: exchanges,
+        tickers: tickers,
+        companyIds: company_ids,
+        eventIds: event_ids,
+        typeIds: type_ids,
+        startDate: start_date,
+        endDate: end_date,
+        isins: isins,
+        documentGroupIds: document_group_ids,
+        updatedBefore: updated_before,
+        updatedAfter: updated_after,
+        expand: expand
+      }
+      request "v3/documents/transcripts", params
+    end
+
+    def transcript(transcript_id, expand: nil)
+      params = {
+        expand: expand
+      }
+      request "v3/documents/transcripts/#{transcript_id}", params
+    end
+
+    def slide_decks(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, company_ids: nil, event_ids: nil, type_ids: nil, start_date: nil, end_date: nil, isins: nil, document_group_ids: nil, updated_before: nil, updated_after: nil, expand: nil)
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction,
+        countries: countries,
+        exchanges: exchanges,
+        tickers: tickers,
+        companyIds: company_ids,
+        eventIds: event_ids,
+        typeIds: type_ids,
+        startDate: start_date,
+        endDate: end_date,
+        isins: isins,
+        documentGroupIds: document_group_ids,
+        updatedBefore: updated_before,
+        updatedAfter: updated_after,
+        expand: expand
+      }
+      request "v3/documents/slides", params
+    end
+
+    def reports(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, company_ids: nil, event_ids: nil, type_ids: nil, start_date: nil, end_date: nil, isins: nil, document_group_ids: nil, updated_before: nil, updated_after: nil, expand: nil)
+      params = {
+        limit: limit,
+        cursor: cursor,
+        direction: direction,
+        countries: countries,
+        exchanges: exchanges,
+        tickers: tickers,
+        companyIds: company_ids,
+        eventIds: event_ids,
+        typeIds: type_ids,
+        startDate: start_date,
+        endDate: end_date,
+        isins: isins,
+        documentGroupIds: document_group_ids,
+        updatedBefore: updated_before,
+        updatedAfter: updated_after,
+        expand: expand
+      }
+      request "v3/documents/reports", params
+    end
+
+    def report(report_id, expand: nil)
+      params = {
+        expand: expand
+      }
+      request "v3/documents/reports/#{report_id}", params
+    end
 
 
     private
@@ -132,7 +230,9 @@ module Quartr
           #   raise InvalidResponse.new response.body
 
           elsif response.success?
-            return JSON.parse response.body
+            parsed_response = JSON.parse response.body
+            # parsed_response['data']
+            return parsed_response
 
           else
             raise Error.new response.body

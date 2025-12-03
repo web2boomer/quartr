@@ -39,9 +39,35 @@ Now we can do all sorts...
 (Companies)[https://docs.quartr.com/v2/reference#tag/company]
 
 ```ruby
+# List companies with default pagination
 companies = quartr.companies
-companies = quartr.company(3624) # Nvidia
-companies = quartr.event(256) # grab an event
+
+# List companies with filtering options
+companies = quartr.companies(countries: "US", exchanges: "NasdaqGS", limit: 100)
+companies = quartr.companies(tickers: "AAPL,MSFT,GOOGL")
+companies = quartr.companies(updated_after: "2024-01-01")
+
+# Pagination with cursor
+first_page = quartr.companies(limit: 50, cursor: 0)
+next_page = quartr.companies(limit: 50, cursor: first_page['pagination']['nextCursor'])
+
+# Retrieve a specific company by ID
+company = quartr.company(company_id: 3624) # Nvidia
+
+# Retrieve a company by ticker
+company = quartr.company(ticker: "NVDA") # Nvidia
+
+# List events with filtering
+events = quartr.events(tickers: "NVDA", limit: 50)
+events = quartr.events(start_date: "2025-01-01", end_date: "2025-12-31")
+events = quartr.quartr.companies(tickers: "AAPL,MSFT,GOOG")
+
+# Paginate through events
+first_events = quartr.events(limit: 100, cursor: 0)
+next_events = quartr.events(limit: 100, cursor: first_events['pagination']['nextCursor'])
+
+# Retrieve a specific event
+event = quartr.event(12345)
 ```
 
 
