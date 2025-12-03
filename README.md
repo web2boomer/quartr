@@ -1,6 +1,6 @@
 # quartr 
 
-[Quartr](https://quartr.com/) API wrapper for Ruby. Full API reference here: https://docs.quartr.com/v2/reference
+[Quartr](https://quartr.com/) API wrapper for Ruby. Full API reference here: https://quartr.dev/api-reference/companies/list-companies
 
 Quartr is transforming the way finance professionals conduct qualitative public market research.
 
@@ -34,11 +34,9 @@ quartr = Quartr::API.new
 
 _*If you have a demo key and so need to access demo API at api-demo.quartr.com rather than api.quartr.com set QUARTR_DEMO env var to 'yes' e.g. export QUARTR_DEMO=yes*_
 
-Now we can do all sorts...
+Now we can make dollar...
 
 ## Companies
-
-[Companies API Reference](https://docs.quartr.com/v2/reference#tag/company)
 
 ```ruby
 # List companies with default pagination
