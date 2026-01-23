@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    quartr (0.3.0)
+    quartr (0.4.0)
       faraday (>= 1.0)
 
 GEM

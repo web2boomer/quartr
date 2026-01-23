@@ -81,8 +81,25 @@ module Quartr
     end
     
     
-    def live_transcripts(countries: nil, exchanges: nil, tickers: nil, event_ids: nil, states: nil, limit: 500)
-      request "v3/live/transcripts", {countries: countries, exchanges: exchanges, tickers: tickers, eventIds: event_ids, states: states, limit: limit}
+    def live_transcripts(countries: nil, exchanges: nil, tickers: nil, event_ids: nil, states: nil, limit: 500, cursor: 0, direction: 'asc', isins: nil, company_ids: nil, transcript_version: nil, start_date: nil, end_date: nil, updated_before: nil, updated_after: nil)
+      params = {
+        countries: countries,
+        exchanges: exchanges,
+        tickers: tickers,
+        eventIds: event_ids,
+        states: states,
+        limit: limit,
+        cursor: cursor,
+        direction: direction,
+        isins: isins,
+        companyIds: company_ids,
+        transcriptVersion: transcript_version,
+        startDate: start_date,
+        endDate: end_date,
+        updatedBefore: updated_before,
+        updatedAfter: updated_after
+      }
+      request "v3/live/transcripts", params
     end     
     
     def live_transcript(id:)
