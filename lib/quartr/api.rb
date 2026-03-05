@@ -402,8 +402,8 @@ module Quartr
       request "v3/documents/reports/#{report_id}/summary"
     end
 
-    # Backlog Audio
-    def backlog_audio(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, company_ids: nil, event_ids: nil, type_ids: nil, start_date: nil, end_date: nil, isins: nil, updated_before: nil, updated_after: nil)
+    # Audio (backlog / historical)
+    def audio(limit: DEFAULT_PAGE_LIMIT, cursor: 0, direction: 'asc', countries: nil, exchanges: nil, tickers: nil, company_ids: nil, event_ids: nil, type_ids: nil, start_date: nil, end_date: nil, isins: nil, updated_before: nil, updated_after: nil, expand: nil)
       params = {
         limit: limit,
         cursor: cursor,
@@ -418,17 +418,32 @@ module Quartr
         endDate: end_date,
         isins: isins,
         updatedBefore: updated_before,
-        updatedAfter: updated_after
+        updatedAfter: updated_after,
+        expand: expand
       }
-      request "v3/backlog/audio", params
+      request "v3/audio", params
+    end
+
+    def audio_item(audio_id:, expand: nil)
+      params = { expand: expand }
+      request "v3/audio/#{audio_id}", params
+    end
+
+    def audio_chapters(audio_id:)
+      request "v3/audio/#{audio_id}/chapters"
+    end
+
+    # Backward-compatible aliases
+    def backlog_audio(**kwargs)
+      audio(**kwargs)
     end
 
     def backlog_audio_item(audio_id:)
-      request "v3/backlog/audio/#{audio_id}"
+      audio_item(audio_id: audio_id)
     end
 
     def backlog_audio_chapters(audio_id:)
-      request "v3/backlog/audio/#{audio_id}/chapters"
+      audio_chapters(audio_id: audio_id)
     end
 
     private

@@ -517,21 +517,21 @@ RSpec.describe Quartr::API do
 
   describe "#backlog_audio" do
     it "fetches backlog audio" do
-      stub_quartr(:get, "v3/backlog/audio", body: { "data" => [{ "id" => 500 }] })
+      stub_quartr(:get, "v3/audio", body: { "data" => [{ "id" => 500 }] })
       result = api.backlog_audio
       expect(result["data"].first["id"]).to eq(500)
     end
 
     it "passes filters" do
-      stub_quartr(:get, "v3/backlog/audio", body: { "data" => [] })
+      stub_quartr(:get, "v3/audio", body: { "data" => [] })
       api.backlog_audio(tickers: "MSFT", start_date: "2025-01-01")
-      expect_quartr_request(:get, "v3/backlog/audio", query: { "tickers" => "MSFT", "startDate" => "2025-01-01" })
+      expect_quartr_request(:get, "v3/audio", query: { "tickers" => "MSFT", "startDate" => "2025-01-01" })
     end
   end
 
   describe "#backlog_audio_item" do
     it "fetches a single backlog audio item" do
-      stub_quartr(:get, "v3/backlog/audio/500", body: { "id" => 500 })
+      stub_quartr(:get, "v3/audio/500", body: { "id" => 500 })
       result = api.backlog_audio_item(audio_id: 500)
       expect(result["id"]).to eq(500)
     end
@@ -539,7 +539,7 @@ RSpec.describe Quartr::API do
 
   describe "#backlog_audio_chapters" do
     it "fetches backlog audio chapters" do
-      stub_quartr(:get, "v3/backlog/audio/500/chapters", body: { "data" => [] })
+      stub_quartr(:get, "v3/audio/500/chapters", body: { "data" => [] })
       result = api.backlog_audio_chapters(audio_id: 500)
       expect(result).to have_key("data")
     end
